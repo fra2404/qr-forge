@@ -7,6 +7,8 @@ on:
 
 permissions:
   contents: write
+  actions: read
+  deployments: write
 
 env:
   CARGO_TERM_COLOR: always
@@ -41,8 +43,17 @@ jobs:
           cd build/cli
           tar -czf ../../qr-forge-cli-macos.tar.gz qr-forge qr-forge-gui ../../README.md ../../LICENSE
 
+      - name: Verify build artifacts
+        run: |
+          echo "Checking build artifacts..."
+          ls -la QR-Forge-GUI-macos.dmg
+          ls -la qr-forge-cli-macos.tar.gz
+          echo "All artifacts verified!"
+
       - name: Release
         uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           name: QR Forge ${{ github.ref_name }}
           body: |
