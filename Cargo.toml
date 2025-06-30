@@ -1,0 +1,16 @@
+[package]
+name = "qr-forge"
+version = "1.0.0"
+edition = "2021"
+description = "Generatore di QR code di alta qualità con supporto SVG e PNG - High-quality QR code generator with SVG and PNG support"
+authors = ["Francesco ALbano"]
+license = "MIT"
+repository = "https://github.com/fra2404/qr-forge"
+keywords = ["qr-code", "svg", "generator", "cli", "rust"]
+categories = ["command-line-utilities", "multimedia::images"]
+
+[dependencies]
+qrcode = "0.14"
+image = "0.24"
+clap = { version = "4.4", features = ["derive"] }
+svg = "0.14"
