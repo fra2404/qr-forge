@@ -1,0 +1,127 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build-release:
+    name: Build Release
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+            name: linux
+          - os: windows-latest
+            target: x86_64-pc-windows-msvc
+            name: windows
+          - os: macos-latest
+            target: x86_64-apple-darwin
+            name: macos
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+
+      - name: Install dependencies (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        run: sudo apt-get update && sudo apt-get install -y libgtk-3-dev
+
+      - name: Build CLI
+        run: cargo build --release --bin qr-forge --target ${{ matrix.target }}
+
+      - name: Build GUI
+        run: cargo build --release --bin qr-forge-gui --target ${{ matrix.target }}
+
+      - name: Create CLI archive (Unix)
+        if: matrix.os != 'windows-latest'
+        run: |
+          mkdir -p dist-cli
+          cp target/${{ matrix.target }}/release/qr-forge dist-cli/
+          cp README.md LICENSE dist-cli/
+          tar -czf qr-forge-cli-${{ matrix.name }}.tar.gz -C dist-cli .
+
+      - name: Create CLI archive (Windows)
+        if: matrix.os == 'windows-latest'
+        run: |
+          mkdir dist-cli
+          copy target\${{ matrix.target }}\release\qr-forge.exe dist-cli\
+          copy README.md dist-cli\
+          copy LICENSE dist-cli\
+          powershell Compress-Archive -Path dist-cli\* -DestinationPath qr-forge-cli-${{ matrix.name }}.zip
+
+      - name: Create GUI archive (Unix)
+        if: matrix.os != 'windows-latest'
+        run: |
+          mkdir -p dist-gui
+          cp target/${{ matrix.target }}/release/qr-forge-gui dist-gui/
+          cp README.md LICENSE dist-gui/
+          tar -czf qr-forge-gui-${{ matrix.name }}.tar.gz -C dist-gui .
+
+      - name: Create GUI archive (Windows)
+        if: matrix.os == 'windows-latest'
+        run: |
+          mkdir dist-gui
+          copy target\${{ matrix.target }}\release\qr-forge-gui.exe dist-gui\
+          copy README.md dist-gui\
+          copy LICENSE dist-gui\
+          powershell Compress-Archive -Path dist-gui\* -DestinationPath qr-forge-gui-${{ matrix.name }}.zip
+
+      - name: Create macOS App Bundle
+        if: matrix.os == 'macos-latest'
+        run: |
+          chmod +x create_icon.sh build_app.sh
+          ./create_icon.sh
+          ./build_app.sh
+          hdiutil create -volname "QR Forge" -srcfolder "QR Forge.app" -ov -format UDZO QR-Forge-GUI-macos.dmg
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          name: QR Forge ${{ github.ref_name }}
+          body: |
+            ## 🔥 QR Forge ${{ github.ref_name }}
+
+            Professional QR code generator with multiple formats and interfaces.
+
+            ### ✨ Features
+            - CLI QR code generator with multiple output formats
+            - GUI application with real-time preview
+            - Support for PNG, SVG, JPEG formats
+            - Customizable colors and sizes
+            - macOS app bundle included
+
+            ### 📦 Downloads
+            Choose the version for your platform:
+
+            **GUI Applications:**
+            - **macOS**: QR-Forge-GUI-macos.dmg (Complete app bundle)
+            - **Linux**: qr-forge-gui-linux.tar.gz  
+            - **Windows**: qr-forge-gui-windows.zip
+
+            **CLI Tools:**
+            - **Linux**: qr-forge-cli-linux.tar.gz
+            - **macOS**: qr-forge-cli-macos.tar.gz
+            - **Windows**: qr-forge-cli-windows.zip
+
+            ### 🚀 Quick Start
+            - **GUI**: Extract and run `qr-forge-gui`
+            - **CLI**: Extract and run `qr-forge "Your text here" -o output.svg`
+
+            See [README.md](https://github.com/fra2404/qr-forge#readme) for detailed usage instructions.
+          files: |
+            qr-forge-cli-${{ matrix.name }}.${{ matrix.os == 'windows-latest' && 'zip' || 'tar.gz' }}
+            qr-forge-gui-${{ matrix.name }}.${{ matrix.os == 'windows-latest' && 'zip' || 'tar.gz' }}
+            ${{ matrix.os == 'macos-latest' && 'QR-Forge-GUI-macos.dmg' || '' }}
