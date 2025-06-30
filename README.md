@@ -245,3 +245,24 @@ This project is released under the MIT License. See the `LICENSE` file for detai
 ---
 
 **Made with ❤️ in Rust**
+
+## Testing
+
+QR Forge has been comprehensively tested across different architectures:
+
+### Quick Test
+```bash
+./quick_test.sh
+```
+
+### Comprehensive Test
+```bash
+./test_homebrew.sh
+```
+
+### Architecture Support
+- ✅ **ARM64 (Apple Silicon)**: Fully tested and verified
+- ⏳ **AMD64 (Intel x86_64)**: Ready for testing
+- 🔄 **Linux**: Cross-platform Rust compatibility
+
+See [TESTING_REPORT.md](TESTING_REPORT.md) for detailed test results.
