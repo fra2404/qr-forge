@@ -23,39 +23,88 @@ jobs:
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
 
-      - name: Generate QR Forge icon
+      - name: Verify icon exists
         run: |
-          chmod +x generate_icon.py
-          python3 generate_icon.py
+          if [ -f "image.png" ]; then
+            echo "✅ Found existing image.png icon"
+            ls -la image.png
+          else
+            echo "❌ image.png not found!"
+            exit 1
+          fi
 
       - name: Build QR Forge (CLI + GUI + App)
         run: |
           chmod +x build_app.sh create_icon.sh
           ./build_app.sh
 
+      - name: Debug build structure
+        run: |
+          echo "=== Build directory structure ==="
+          find build -type f -name "*" | head -20
+          echo ""
+          echo "=== Apps directory ==="
+          ls -la build/apps/ || echo "apps directory not found"
+          echo ""
+          echo "=== CLI directory ==="
+          ls -la build/cli/ || echo "cli directory not found"
+
       - name: Create macOS DMG
         run: |
-          # Create DMG from the organized build location
-          hdiutil create -volname "QR Forge" -srcfolder "build/apps/QR Forge.app" -ov -format UDZO QR-Forge-GUI-macos.dmg
+          if [ -d "build/apps/QR Forge.app" ]; then
+            echo "Creating DMG from build/apps/QR Forge.app"
+            hdiutil create -volname "QR Forge" -srcfolder "build/apps/QR Forge.app" -ov -format UDZO QR-Forge-GUI-macos.dmg
+          else
+            echo "App bundle not found at build/apps/QR Forge.app"
+            echo "Looking for alternative locations..."
+            find . -name "QR Forge.app" -type d
+            exit 1
+          fi
 
       - name: Create CLI archive
         run: |
-          cd build/cli
-          tar -czf ../../qr-forge-cli-macos.tar.gz qr-forge qr-forge-gui ../../README.md ../../LICENSE
+          if [ -d "build/cli" ] && [ -f "build/cli/qr-forge" ]; then
+            echo "Creating CLI archive from build/cli"
+            cd build/cli
+            tar -czf ../../qr-forge-cli-macos.tar.gz qr-forge qr-forge-gui ../../README.md ../../LICENSE
+          else
+            echo "CLI binaries not found in build/cli"
+            echo "Looking for CLI binaries..."
+            find . -name "qr-forge" -type f
+            exit 1
+          fi
 
       - name: Verify build artifacts
         run: |
-          echo "Checking build artifacts..."
-          ls -la QR-Forge-GUI-macos.dmg
-          ls -la qr-forge-cli-macos.tar.gz
-          echo "All artifacts verified!"
+          echo "=== Checking build artifacts ==="
+          if [ -f "QR-Forge-GUI-macos.dmg" ]; then
+            echo "✅ DMG created successfully:"
+            ls -la QR-Forge-GUI-macos.dmg
+          else
+            echo "❌ DMG not found"
+          fi
+          
+          if [ -f "qr-forge-cli-macos.tar.gz" ]; then
+            echo "✅ CLI archive created successfully:"
+            ls -la qr-forge-cli-macos.tar.gz
+          else
+            echo "❌ CLI archive not found"
+          fi
+          
+          echo ""
+          echo "=== Root directory contents ==="
+          ls -la
 
       - name: Release
         uses: softprops/action-gh-release@v1
+        if: success()
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           name: QR Forge ${{ github.ref_name }}
+          tag_name: ${{ github.ref_name }}
+          draft: false
+          prerelease: false
           body: |
             ## 🔥 QR Forge ${{ github.ref_name }} - macOS Release
 
