@@ -7,40 +7,40 @@ use svg::node::element::{Rectangle, Group};
 
 #[derive(Parser)]
 #[command(name = "qr-forge")]
-#[command(about = "🔥 QR Forge - Generatore di QR code di alta qualità con supporto SVG")]
+#[command(about = "🔥 QR Forge - High-quality QR code generator with SVG support")]
 #[command(version = "1.0.0")]
 #[command(author = "Francesco")]
-#[command(long_about = "QR Forge è un potente generatore di QR code che supporta formati SVG scalabili e bitmap ad alta risoluzione. Perfetto per uso professionale, stampa e web.")]
+#[command(long_about = "QR Forge is a powerful QR code generator that supports scalable SVG formats and high-resolution bitmaps. Perfect for professional use, printing, and web.")]
 struct Args {
-    /// URL del sito web per cui generare il QR code
+    /// Website URL to generate QR code for
     #[arg(short, long)]
     url: String,
 
-    /// Nome del file di output (senza estensione)
+    /// Output file name (without extension)
     #[arg(short, long, default_value = "qrcode")]
     output: String,
 
-    /// Dimensione del QR code in pixel (larghezza x altezza)
+    /// QR code size in pixels (width x height)
     #[arg(short, long, default_value = "800")]
     size: u32,
 
-    /// Livello di correzione errori: L (basso), M (medio), Q (quartile), H (alto)
+    /// Error correction level: L (low), M (medium), Q (quartile), H (high)
     #[arg(short, long, default_value = "H")]
     error_correction: String,
 
-    /// Margine intorno al QR code (in moduli)
+    /// Margin around QR code (in modules)
     #[arg(short, long, default_value = "4")]
     margin: u32,
 
-    /// Formato di output: png, jpg, bmp, svg
+    /// Output format: png, jpg, bmp, svg
     #[arg(short, long, default_value = "png")]
     format: String,
 
-    /// Colore del QR code (per SVG, formato hex senza #)
+    /// QR code color (for SVG, hex format without #)
     #[arg(long, default_value = "000000")]
     color: String,
 
-    /// Colore dello sfondo (per SVG, formato hex senza #)
+    /// Background color (for SVG, hex format without #)
     #[arg(long, default_value = "ffffff")]
     background_color: String,
 }
@@ -48,48 +48,48 @@ struct Args {
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let args = Args::parse();
 
-    // Validazione URL
+    // URL validation
     let url = validate_url(&args.url)?;
     
-    // Determina il livello di correzione errori
+    // Determine error correction level
     let ec_level = match args.error_correction.to_uppercase().as_str() {
         "L" => EcLevel::L,
         "M" => EcLevel::M,
         "Q" => EcLevel::Q,
         "H" => EcLevel::H,
-        _ => return Err("Livello di correzione errori non valido. Usa: L, M, Q, H".into()),
+        _ => return Err("Invalid error correction level. Use: L, M, Q, H".into()),
     };
 
-    println!("🔧 Generando QR code per: {}", url);
-    println!("📊 Parametri:");
-    println!("   - Dimensione: {}x{} pixel", args.size, args.size);
-    println!("   - Correzione errori: {}", args.error_correction);
-    println!("   - Margine: {} moduli", args.margin);
-    println!("   - Formato: {}", args.format);
+    println!("🔧 Generating QR code for: {}", url);
+    println!("📊 Parameters:");
+    println!("   - Size: {}x{} pixels", args.size, args.size);
+    println!("   - Error correction: {}", args.error_correction);
+    println!("   - Margin: {} modules", args.margin);
+    println!("   - Format: {}", args.format);
 
-    // Genera il QR code
+    // Generate QR code
     let qr_code = QrCode::with_error_correction_level(&url, ec_level)
-        .map_err(|e| format!("Errore nella generazione del QR code: {}", e))?;
+        .map_err(|e| format!("Error generating QR code: {}", e))?;
 
-    // Determina il nome del file
+    // Determine filename
     let filename = format!("{}.{}", args.output, args.format.to_lowercase());
     
-    // Genera il file in base al formato
+    // Generate file based on format
     match args.format.to_lowercase().as_str() {
         "svg" => {
             generate_svg_qr(&qr_code, &filename, args.size, args.margin, &args.color, &args.background_color)?;
         }
         _ => {
-            // Crea l'immagine ad alta risoluzione per formati bitmap
+            // Create high-resolution image for bitmap formats
             let image = generate_high_quality_image(&qr_code, args.size, args.margin)?;
             save_image(&image, &filename, &args.format)?;
         }
     }
 
-    println!("✅ QR code generato con successo!");
-    println!("📁 File salvato come: {}", filename);
+    println!("✅ QR code generated successfully!");
+    println!("📁 File saved as: {}", filename);
     
-    // Mostra statistiche del QR code
+    // Show QR code statistics
     print_qr_stats(&qr_code, &url);
 
     Ok(())
@@ -102,9 +102,9 @@ fn validate_url(input: &str) -> Result<String, Box<dyn std::error::Error>> {
         format!("https://{}", input)
     };
 
-    // Validazione di base
+    // Basic validation
     if !url.contains('.') {
-        return Err("URL non valido: deve contenere almeno un punto".into());
+        return Err("Invalid URL: must contain at least one dot".into());
     }
 
     Ok(url)
@@ -120,32 +120,32 @@ fn generate_high_quality_image(
     let module_size = size / total_modules;
     let actual_size = module_size * total_modules;
 
-    println!("📐 Dettagli tecnici:");
-    println!("   - Moduli QR: {}x{}", qr_width, qr_width);
-    println!("   - Moduli totali (con margine): {}x{}", total_modules, total_modules);
-    println!("   - Dimensione modulo: {}x{} pixel", module_size, module_size);
-    println!("   - Dimensione finale: {}x{} pixel", actual_size, actual_size);
+    println!("📐 Technical details:");
+    println!("   - QR modules: {}x{}", qr_width, qr_width);
+    println!("   - Total modules (with margin): {}x{}", total_modules, total_modules);
+    println!("   - Module size: {}x{} pixels", module_size, module_size);
+    println!("   - Final size: {}x{} pixels", actual_size, actual_size);
 
     if module_size < 4 {
-        eprintln!("⚠️  Attenzione: Dimensione modulo molto piccola ({}px). Considera di aumentare la dimensione totale.", module_size);
+        eprintln!("⚠️  Warning: Very small module size ({}px). Consider increasing total size.", module_size);
     }
 
     let mut image = ImageBuffer::new(actual_size, actual_size);
 
-    // Riempi di bianco
+    // Fill with white
     for pixel in image.pixels_mut() {
         *pixel = Rgb([255, 255, 255]);
     }
 
-    // Disegna il QR code
+    // Draw QR code
     for y in 0..qr_width {
         for x in 0..qr_width {
             if qr_code[(x as usize, y as usize)] == qrcode::Color::Dark {
-                // Calcola la posizione con il margine
+                // Calculate position with margin
                 let start_x = (x + margin) * module_size;
                 let start_y = (y + margin) * module_size;
 
-                // Disegna un modulo (quadrato nero)
+                // Draw a module (black square)
                 for dy in 0..module_size {
                     for dx in 0..module_size {
                         let px = start_x + dx;
@@ -179,47 +179,47 @@ fn save_image(
             image.save_with_format(filename, image::ImageFormat::Bmp)?;
         }
         _ => {
-            return Err(format!("Formato non supportato: {}. Usa png, jpg, bmp, o svg", format).into());
+            return Err(format!("Unsupported format: {}. Use png, jpg, bmp, or svg", format).into());
         }
     }
 
-    // Mostra informazioni sul file
+    // Show file information
     if let Ok(metadata) = fs::metadata(filename) {
         let size_kb = metadata.len() as f64 / 1024.0;
-        println!("📊 Dimensione file: {:.2} KB", size_kb);
+        println!("📊 File size: {:.2} KB", size_kb);
     }
 
     Ok(())
 }
 
 fn print_qr_stats(qr_code: &QrCode, url: &str) {
-    println!("\n📈 Statistiche QR Code:");
-    println!("   - Versione: {:?}", qr_code.version());
-    println!("   - Dimensione matrice: {}x{} moduli", qr_code.width(), qr_code.width());
-    println!("   - Lunghezza URL: {} caratteri", url.len());
-    println!("   - Livello correzione: {:?}", qr_code.error_correction_level());
+    println!("\n📈 QR Code Statistics:");
+    println!("   - Version: {:?}", qr_code.version());
+    println!("   - Matrix size: {}x{} modules", qr_code.width(), qr_code.width());
+    println!("   - URL length: {} characters", url.len());
+    println!("   - Error correction level: {:?}", qr_code.error_correction_level());
     
-    // Capacità massima per questa versione
+    // Maximum capacity for this version
     let max_capacity = get_max_capacity(qr_code.version(), qr_code.error_correction_level());
-    println!("   - Capacità massima: {} caratteri", max_capacity);
-    println!("   - Utilizzo capacità: {:.1}%", (url.len() as f64 / max_capacity as f64) * 100.0);
+    println!("   - Maximum capacity: {} characters", max_capacity);
+    println!("   - Capacity usage: {:.1}%", (url.len() as f64 / max_capacity as f64) * 100.0);
     
-    println!("\n💡 Suggerimenti per l'uso:");
-    println!("   - Testa il QR code con diversi lettori");
-    println!("   - Assicurati che sia leggibile anche quando stampato");
-    println!("   - Per stampe, usa almeno 2.5cm x 2.5cm");
+    println!("\n💡 Usage tips:");
+    println!("   - Test the QR code with different readers");
+    println!("   - Ensure it's readable even when printed");
+    println!("   - For printing, use at least 2.5cm x 2.5cm");
     
     if url.len() > max_capacity * 80 / 100 {
-        println!("   ⚠️  URL vicino al limite di capacità - considera di abbreviarlo");
+        println!("   ⚠️  URL close to capacity limit - consider shortening it");
     }
 }
 
 fn get_max_capacity(version: qrcode::Version, ec_level: EcLevel) -> usize {
-    // Capacità approssimative per dati alfanumerici basate sulla versione QR
-    // Usiamo i moduli della matrice per determinare la capacità
+    // Approximate capacities for alphanumeric data based on QR version
+    // We use matrix modules to determine capacity
     let modules = match version {
         qrcode::Version::Normal(v) => (4 * v + 17) as u8,
-        qrcode::Version::Micro(_) => 21, // Semplificazione per micro QR
+        qrcode::Version::Micro(_) => 21, // Simplification for micro QR
     };
     
     match (modules, ec_level) {
@@ -239,7 +239,7 @@ fn get_max_capacity(version: qrcode::Version, ec_level: EcLevel) -> usize {
         (33, EcLevel::M) => 90,
         (33, EcLevel::Q) => 67,
         (33, EcLevel::H) => 50,
-        _ => 1000, // Valore di default per versioni superiori
+        _ => 1000, // Default value for higher versions
     }
 }
 
@@ -256,22 +256,22 @@ fn generate_svg_qr(
     let module_size = size / total_modules;
     let actual_size = module_size * total_modules;
 
-    println!("📐 Dettagli tecnici SVG:");
-    println!("   - Moduli QR: {}x{}", qr_width, qr_width);
-    println!("   - Moduli totali (con margine): {}x{}", total_modules, total_modules);
-    println!("   - Dimensione modulo: {}x{} unità SVG", module_size, module_size);
-    println!("   - Dimensione finale: {}x{} unità SVG", actual_size, actual_size);
-    println!("   - Colore QR: #{}", qr_color);
-    println!("   - Colore sfondo: #{}", bg_color);
+    println!("📐 SVG technical details:");
+    println!("   - QR modules: {}x{}", qr_width, qr_width);
+    println!("   - Total modules (with margin): {}x{}", total_modules, total_modules);
+    println!("   - Module size: {}x{} SVG units", module_size, module_size);
+    println!("   - Final size: {}x{} SVG units", actual_size, actual_size);
+    println!("   - QR color: #{}", qr_color);
+    println!("   - Background color: #{}", bg_color);
 
-    // Crea il documento SVG
+    // Create SVG document
     let mut document = Document::new()
         .set("viewBox", (0, 0, actual_size, actual_size))
         .set("width", actual_size)
         .set("height", actual_size)
         .set("xmlns", "http://www.w3.org/2000/svg");
 
-    // Sfondo colorato
+    // Colored background
     let background = Rectangle::new()
         .set("x", 0)
         .set("y", 0)
@@ -281,12 +281,12 @@ fn generate_svg_qr(
     
     document = document.add(background);
 
-    // Gruppo per tutti i moduli del QR code con colore personalizzato
+    // Group for all QR code modules with custom color
     let mut qr_group = Group::new()
         .set("fill", format!("#{}", qr_color))
-        .set("shape-rendering", "crispEdges"); // Per bordi nitidi
+        .set("shape-rendering", "crispEdges"); // For sharp edges
 
-    // Disegna i moduli del QR code
+    // Draw QR code modules
     for y in 0..qr_width {
         for x in 0..qr_width {
             if qr_code[(x as usize, y as usize)] == qrcode::Color::Dark {
@@ -306,16 +306,16 @@ fn generate_svg_qr(
 
     document = document.add(qr_group);
 
-    // Salva il file SVG
+    // Save SVG file
     std::fs::write(filename, document.to_string())?;
 
-    // Mostra informazioni sul file
+    // Show file information
     if let Ok(metadata) = fs::metadata(filename) {
         let size_kb = metadata.len() as f64 / 1024.0;
-        println!("📊 Dimensione file SVG: {:.2} KB", size_kb);
+        println!("📊 SVG file size: {:.2} KB", size_kb);
     }
 
-    println!("✨ QR code SVG generato! Scalabile all'infinito senza perdita di qualità.");
+    println!("✨ SVG QR code generated! Infinitely scalable without quality loss.");
 
     Ok(())
 }

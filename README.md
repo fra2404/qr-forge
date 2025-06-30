@@ -3,172 +3,192 @@
 [![Rust](https://img.shields.io/badge/rust-1.70+-orange.svg)](https://www.rust-lang.org)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-**QR Forge** è un potente generatore di QR code scritto in Rust che produce QR code di **altissima qualità** con supporto per formati vettoriali SVG e bitmap ad alta risoluzione.
+**QR Forge** is a powerful QR code generator written in Rust that produces **highest quality** QR codes with support for scalable SVG formats and high-resolution bitmaps.
 
-## ✨ Caratteristiche
+## ✨ Features
 
-- 🎨 **Formati multipli**: SVG (scalabile), PNG, JPG, BMP
-- 🔧 **Altamente personalizzabile**: colori, dimensioni, margini, correzione errori
-- 📱 **Ottimizzato per stampa**: supporto per stampa professionale
-- ⚡ **Veloce e efficiente**: scritto in Rust per massime prestazioni
-- 🎯 **Qualità professionale**: correzione errori fino al livello H
-- 📐 **SVG scalabile**: qualità infinita senza perdita di dettagli
+- 🎨 **Multiple formats**: SVG (scalable), PNG, JPG, BMP
+- 🔧 **Highly customizable**: colors, sizes, margins, error correction
+- 📱 **Print optimized**: support for professional printing
+- ⚡ **Fast and efficient**: written in Rust for maximum performance
+- 🎯 **Professional quality**: error correction up to level H
+- 📐 **Scalable SVG**: infinite quality without loss of detail
 
-## 🚀 Installazione
+## 🚀 Installation
 
-### Prerequisiti
-- Rust 1.70 o superiore
-- Cargo (incluso con Rust)
+### Prerequisites
 
-### Compilazione da sorgente
+- Rust 1.70 or higher
+- Cargo (included with Rust)
+
+### Build from source
+
 ```bash
 git clone https://github.com/francesco/qr-forge.git
 cd qr-forge
 cargo build --release
 ```
 
-L'eseguibile sarà disponibile in `target/release/qr-forge`
+The executable will be available at `target/release/qr-forge`
 
-## 📖 Utilizzo
+## 📖 Usage
 
-### Sintassi base
+### Basic syntax
+
 ```bash
 qr-forge --url "https://example.com"
 ```
 
-### Esempi
+### Examples
 
-**QR code SVG scalabile:**
+**Scalable SVG QR code:**
+
 ```bash
 qr-forge --url "https://github.com" --format svg --output "github_qr"
 ```
 
-**QR code con colori personalizzati:**
+**QR code with custom colors:**
+
 ```bash
 qr-forge --url "https://rust-lang.org" --format svg --color "ff6600" --background-color "f5f5dc"
 ```
 
-**QR code ad alta risoluzione per stampa:**
+**High-resolution QR code for printing:**
+
 ```bash
 qr-forge --url "https://example.com" --format png --size 2400 --margin 4
 ```
 
-**QR code ottimizzato per stampa (senza bordo):**
+**Print-optimized QR code (no border):**
+
 ```bash
 qr-forge --url "https://example.com" --format svg --margin 0 --size 1200
 ```
 
-### Parametri disponibili
+### Available parameters
 
-| Parametro | Descrizione | Default | Esempio |
-|-----------|-------------|---------|---------|
-| `--url` | URL da codificare (obbligatorio) | - | `https://example.com` |
-| `--output` | Nome file output (senza estensione) | `qrcode` | `my_qr` |
-| `--size` | Dimensioni in pixel | `800` | `1200` |
-| `--format` | Formato output | `png` | `svg`, `png`, `jpg`, `bmp` |
-| `--margin` | Margine in moduli | `4` | `0`, `2`, `8` |
-| `--error-correction` | Livello correzione errori | `H` | `L`, `M`, `Q`, `H` |
-| `--color` | Colore QR (hex, solo SVG) | `000000` | `ff0000` |
-| `--background-color` | Colore sfondo (hex, solo SVG) | `ffffff` | `f0f8ff` |
+| Parameter            | Description                         | Default  | Example                    |
+| -------------------- | ----------------------------------- | -------- | -------------------------- |
+| `--url`              | URL to encode (required)            | -        | `https://example.com`      |
+| `--output`           | Output filename (without extension) | `qrcode` | `my_qr`                    |
+| `--size`             | Size in pixels                      | `800`    | `1200`                     |
+| `--format`           | Output format                       | `png`    | `svg`, `png`, `jpg`, `bmp` |
+| `--margin`           | Margin in modules                   | `4`      | `0`, `2`, `8`              |
+| `--error-correction` | Error correction level              | `H`      | `L`, `M`, `Q`, `H`         |
+| `--color`            | QR color (hex, SVG only)            | `000000` | `ff0000`                   |
+| `--background-color` | Background color (hex, SVG only)    | `ffffff` | `f0f8ff`                   |
 
-## 🎯 Casi d'uso
+## 🎯 Use Cases
 
-### 📱 **Per uso digitale**
+### 📱 **For digital use**
+
 ```bash
 qr-forge --url "https://mywebsite.com" --format svg --size 500
 ```
 
-### 🖨️ **Per stampa professionale**
+### 🖨️ **For professional printing**
+
 ```bash
 qr-forge --url "https://mywebsite.com" --format png --size 2400 --margin 2
 ```
 
-### 🎨 **Per design personalizzato**
+### 🎨 **For custom design**
+
 ```bash
 qr-forge --url "https://mywebsite.com" --format svg --color "2c3e50" --background-color "ecf0f1"
 ```
 
-### 📋 **Per biglietti da visita**
+### 📋 **For business cards**
+
 ```bash
 qr-forge --url "https://linkedin.com/in/myprofile" --format svg --margin 1 --size 800
 ```
 
-## 📊 Formati supportati
+## 📊 Supported Formats
 
-| Formato | Descrizione | Caso d'uso ideale |
-|---------|-------------|-------------------|
-| **SVG** | Vettoriale scalabile | Web, stampa professionale, loghi |
-| **PNG** | Bitmap alta qualità | Stampa, presentazioni |
-| **JPG** | Bitmap compresso | Web, condivisione |
-| **BMP** | Bitmap non compresso | Elaborazione immagini |
+| Format  | Description         | Ideal Use Case                    |
+| ------- | ------------------- | --------------------------------- |
+| **SVG** | Scalable vector     | Web, professional printing, logos |
+| **PNG** | High-quality bitmap | Printing, presentations           |
+| **JPG** | Compressed bitmap   | Web, sharing                      |
+| **BMP** | Uncompressed bitmap | Image processing                  |
 
-## 🔧 Livelli di correzione errori
+## 🔧 Error Correction Levels
 
-| Livello | Correzione | Capacità | Uso consigliato |
-|---------|------------|----------|------------------|
-| **L** | ~7% | Massima | Ambienti perfetti |
-| **M** | ~15% | Alta | Uso generale |
-| **Q** | ~25% | Media | Ambienti difficili |
-| **H** | ~30% | Minima | **Stampa/Professionale** |
+| Level | Correction | Capacity | Recommended Use           |
+| ----- | ---------- | -------- | ------------------------- |
+| **L** | ~7%        | Maximum  | Perfect environments      |
+| **M** | ~15%       | High     | General use               |
+| **Q** | ~25%       | Medium   | Difficult environments    |
+| **H** | ~30%       | Minimum  | **Printing/Professional** |
 
-## 🎨 Esempi di output
+## 🎨 Output Examples
 
-### QR Code classico
+### Classic QR Code
+
 ```bash
 qr-forge --url "https://rust-lang.org"
 ```
-- Output: `qrcode.png` (800x800px, nero su bianco)
 
-### QR Code per stampa
+- Output: `qrcode.png` (800x800px, black on white)
+
+### QR Code for printing
+
 ```bash
 qr-forge --url "https://example.com" --format svg --margin 2 --size 1200
 ```
-- Output: `qrcode.svg` (scalabile, ottimo per stampa)
 
-### QR Code colorato
+- Output: `qrcode.svg` (scalable, excellent for printing)
+
+### Colored QR Code
+
 ```bash
 qr-forge --url "https://github.com" --format svg --color "0066cc" --background-color "f0f8ff"
 ```
-- Output: `qrcode.svg` (blu su azzurro chiaro)
 
-## 🏗️ Sviluppo
+- Output: `qrcode.svg` (blue on light blue)
 
-### Compilazione
+## 🏗️ Development
+
+### Building
+
 ```bash
 cargo build
 ```
 
-### Test
+### Testing
+
 ```bash
 cargo test
 ```
 
-### Compilazione ottimizzata
+### Optimized build
+
 ```bash
 cargo build --release
 ```
 
-## 🤝 Contribuire
+## 🤝 Contributing
 
-I contributi sono benvenuti! Per favore:
+Contributions are welcome! Please:
 
-1. Fai fork del progetto
-2. Crea un branch per la tua feature (`git checkout -b feature/AmazingFeature`)
-3. Committa le tue modifiche (`git commit -m 'Add AmazingFeature'`)
-4. Pusha al branch (`git push origin feature/AmazingFeature`)
-5. Apri una Pull Request
+1. Fork the project
+2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
-## 📝 Licenza
+## 📝 License
 
-Questo progetto è rilasciato sotto licenza MIT. Vedi il file `LICENSE` per i dettagli.
+This project is released under the MIT License. See the `LICENSE` file for details.
 
-## 🙏 Ringraziamenti
+## 🙏 Acknowledgments
 
-- [qrcode-rust](https://github.com/kennytm/qrcode-rust) - Libreria core per la generazione QR
-- [image-rs](https://github.com/image-rs/image) - Elaborazione immagini
-- [clap](https://github.com/clap-rs/clap) - Parsing argomenti CLI
-- [svg](https://github.com/bodoni/svg) - Generazione SVG
+- [qrcode-rust](https://github.com/kennytm/qrcode-rust) - Core library for QR generation
+- [image-rs](https://github.com/image-rs/image) - Image processing
+- [clap](https://github.com/clap-rs/clap) - CLI argument parsing
+- [svg](https://github.com/bodoni/svg) - SVG generation
 
 ---
 
-**Fatto con ❤️ in Rust**
+**Made with ❤️ in Rust**
