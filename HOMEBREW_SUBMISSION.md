@@ -82,6 +82,7 @@ Go to GitHub and create a Pull Request with:
 **Title**: `qr-forge: new formula`
 
 **Description**:
+
 ```
 ## qr-forge
 
@@ -117,6 +118,7 @@ Professional QR code generator built with Rust.
 ## Test Results
 
 ### ARM64 (Apple Silicon) - ✅ PASSED
+
 Tested on macOS with Apple Silicon M-series processor:
 
 - **Architecture**: arm64
@@ -130,9 +132,11 @@ Tested on macOS with Apple Silicon M-series processor:
 - **Memory usage**: ⚠️ Valgrind not available on macOS (normal)
 
 ### AMD64 (Intel) - ⏳ PENDING
+
 Testing on Intel-based Mac or Linux system needed:
 
 To test on AMD64 architecture:
+
 ```bash
 # Run the comprehensive test script
 ./test_homebrew.sh
@@ -141,7 +145,9 @@ To test on AMD64 architecture:
 Expected results should mirror ARM64 performance with similar timing.
 
 ### Cross-Architecture Compatibility
+
 The formula uses `cargo install` which automatically compiles for the target architecture, ensuring compatibility across:
+
 - ✅ ARM64 (Apple Silicon M1/M2/M3)
 - ⏳ AMD64 (Intel x86_64) - pending validation
 - 🔄 Linux (via Rust cross-compilation)

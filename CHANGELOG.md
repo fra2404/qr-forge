@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.0.0] - 2025-06-30
 
 ### Added
+
 - Initial release of QR Forge
 - CLI QR code generator with multiple output formats (PNG, SVG, JPEG)
 - GUI application with real-time preview using egui/eframe
@@ -21,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - English localization (converted from Italian)
 
 ### Features
+
 - **CLI Interface**: Command-line tool for batch processing and automation
 - **GUI Interface**: User-friendly graphical interface with live preview
 - **Multiple Formats**: PNG, SVG, and JPEG output support
@@ -29,6 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **macOS Integration**: Proper .app bundle with icon and metadata
 
 ### Technical
+
 - Built with Rust for performance and safety
 - Uses qrcode crate for QR generation
 - egui/eframe for cross-platform GUI

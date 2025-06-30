@@ -1,17 +1,20 @@
 # QR Forge - Cross-Architecture Testing Report
 
 ## Overview
+
 This document contains the testing results for QR Forge Homebrew formula across different architectures.
 
 ## ARM64 (Apple Silicon) - ✅ PASSED
 
 **Test Environment:**
+
 - Platform: macOS (Darwin)
 - Architecture: arm64 (Apple Silicon M-series)
 - Homebrew Version: 4.5.8-117-g019a799
 - Test Date: $(date '+%Y-%m-%d %H:%M:%S')
 
 **Test Results:**
+
 - ✅ Formula syntax validation
 - ✅ Installation from source (`cargo install`)
 - ✅ Binary functionality (help, version, QR generation)
@@ -23,6 +26,7 @@ This document contains the testing results for QR Forge Homebrew formula across 
 - ✅ Cross-format compatibility
 
 **Sample Output:**
+
 ```
 🔧 Generating QR code for: https://github.com/fra2404/qr-forge
 📊 Parameters:
@@ -39,11 +43,13 @@ This document contains the testing results for QR Forge Homebrew formula across 
 To test QR Forge on Intel-based systems:
 
 ### Prerequisites
+
 - Intel-based Mac or Linux system with x86_64 architecture
 - Homebrew installed
 - Internet connection for downloading dependencies
 
 ### Quick Test (5 minutes)
+
 ```bash
 # Clone the repository
 git clone https://github.com/fra2404/qr-forge.git
@@ -54,13 +60,16 @@ cd qr-forge
 ```
 
 ### Comprehensive Test (10 minutes)
+
 ```bash
 # Run full test suite
 ./test_homebrew.sh
 ```
 
 ### Expected Results on AMD64
+
 The test should produce similar results to ARM64:
+
 - Formula syntax should validate ✅
 - Installation should complete successfully ✅
 - All functionality tests should pass ✅
@@ -78,6 +87,7 @@ QR Forge uses Rust's `cargo install` which provides excellent cross-platform com
 ## Rust Dependencies Compatibility
 
 All dependencies are cross-platform compatible:
+
 - `qrcode`: Pure Rust QR code generation
 - `image`: Cross-platform image processing
 - `clap`: Cross-platform CLI parsing
@@ -98,6 +108,7 @@ If you have access to an Intel-based system, please help validate:
 ## Continuous Integration
 
 The project includes GitHub Actions for automated testing, currently focused on:
+
 - ✅ macOS (latest) - primarily ARM64
 - 🔄 Future: Add Intel runners if needed
 - 🔄 Future: Add Linux testing

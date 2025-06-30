@@ -22,11 +22,13 @@
 ## 🚀 Quick Start
 
 ### Download & Install
+
 - **macOS**: [Download QR-Forge-GUI-macos.dmg](https://github.com/fra2404/qr-forge/releases/latest)
 - **Linux**: [Download qr-forge-linux.tar.gz](https://github.com/fra2404/qr-forge/releases/latest)
 - **Windows**: [Download qr-forge-windows.zip](https://github.com/fra2404/qr-forge/releases/latest)
 
 ### CLI Usage
+
 ```bash
 # Generate SVG QR code
 qr-forge "Hello World" -o qr.svg
@@ -36,6 +38,7 @@ qr-forge "https://example.com" -o qr.png -s 1000 --foreground "#FF0000" --backgr
 ```
 
 ### GUI Usage
+
 ```bash
 # Launch graphical interface
 qr-forge-gui
@@ -55,14 +58,14 @@ cargo run --bin qr-forge-gui
 
 ## 📊 Features Comparison
 
-| Feature | CLI | GUI |
-|---------|-----|-----|
-| All output formats | ✅ | ✅ |
-| Batch processing | ✅ | ❌ |
-| Real-time preview | ❌ | ✅ |
-| Color picker | ❌ | ✅ |
-| Automation friendly | ✅ | ❌ |
-| Beginner friendly | ❌ | ✅ |
+| Feature             | CLI | GUI |
+| ------------------- | --- | --- |
+| All output formats  | ✅  | ✅  |
+| Batch processing    | ✅  | ❌  |
+| Real-time preview   | ❌  | ✅  |
+| Color picker        | ❌  | ✅  |
+| Automation friendly | ✅  | ❌  |
+| Beginner friendly   | ❌  | ✅  |
 
 ## 🤝 Contributing
 

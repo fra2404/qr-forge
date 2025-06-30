@@ -95,14 +95,14 @@ jobs:
           else
             echo "❌ DMG not found"
           fi
-          
+
           if [ -f "qr-forge-cli-macos.tar.gz" ]; then
             echo "✅ CLI archive created successfully:"
             ls -la qr-forge-cli-macos.tar.gz
           else
             echo "❌ CLI archive not found"
           fi
-          
+
           echo ""
           echo "=== Root directory contents ==="
           ls -la

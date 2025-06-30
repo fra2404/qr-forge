@@ -10,6 +10,7 @@ This directory contains the GitHub Pages website for QR Forge.
 ## Development
 
 To test locally:
+
 1. Install GitHub Pages gem: `gem install github-pages`
 2. Run: `bundle exec jekyll serve`
 3. Visit: `http://localhost:4000`

@@ -2,7 +2,7 @@ name: QR Forge
 description: High-quality QR code generator with SVG and PNG support, featuring both CLI and GUI interfaces
 topics:
   - qr-code
-  - qr-generator  
+  - qr-generator
   - svg
   - png
   - rust

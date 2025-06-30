@@ -24,13 +24,13 @@
 
 ## 🚀 Quick Start
 
-### 🍺 Install with Homebrew (macOS - Recommended)
+### 🍺 Install with Homebrew (macOS/Linux - Recommended)
 
 ```bash
-# Install QR Forge CLI and GUI
-brew install fra2404/qr-forge/qr-forge
+# Add the QR Forge tap
+brew tap fra2404/qr-forge
 
-# Or install from main Homebrew (coming soon)
+# Install QR Forge CLI and GUI
 brew install qr-forge
 ```
 
@@ -251,16 +251,19 @@ This project is released under the MIT License. See the `LICENSE` file for detai
 QR Forge has been comprehensively tested across different architectures:
 
 ### Quick Test
+
 ```bash
 ./quick_test.sh
 ```
 
 ### Comprehensive Test
+
 ```bash
 ./test_homebrew.sh
 ```
 
 ### Architecture Support
+
 - ✅ **ARM64 (Apple Silicon)**: Fully tested and verified
 - ⏳ **AMD64 (Intel x86_64)**: Ready for testing
 - 🔄 **Linux**: Cross-platform Rust compatibility
