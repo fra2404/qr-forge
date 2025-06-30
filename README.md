@@ -1,10 +1,13 @@
 # 🔥 QR Forge
 
+> **Professional QR code generator built with Rust** - High-quality output, multiple formats, and dual interfaces
+
 [![CI](https://github.com/fra2404/qr-forge/actions/workflows/ci.yml/badge.svg)](https://github.com/fra2404/qr-forge/actions/workflows/ci.yml)
 [![Release](https://github.com/fra2404/qr-forge/actions/workflows/release.yml/badge.svg)](https://github.com/fra2404/qr-forge/actions/workflows/release.yml)
 [![Rust](https://img.shields.io/badge/rust-1.70+-orange.svg)](https://www.rust-lang.org)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![GitHub release](https://img.shields.io/github/release/fra2404/qr-forge.svg)](https://github.com/fra2404/qr-forge/releases/latest)
+[![Downloads](https://img.shields.io/github/downloads/fra2404/qr-forge/total.svg)](https://github.com/fra2404/qr-forge/releases)
 
 **QR Forge** is a powerful QR code generator written in Rust that produces **highest quality** QR codes with support for scalable SVG formats and high-resolution bitmaps.
 
