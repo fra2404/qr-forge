@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Forge - Professional QR Code Generator</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --accent-color: #e74c3c;
+            --secondary-color: #3498db;
+            --bg-color: #ecf0f1;
+            --text-color: #2c3e50;
+            --card-bg: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .hero .tagline {
+            font-size: 1.4rem;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 15px 30px;
+            background-color: var(--accent-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            border-color: white;
+        }
+
+        .features {
+            padding: 80px 0;
+            background: white;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 60px;
+            color: var(--primary-color);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+
+        .feature-card {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .demo {
+            padding: 80px 0;
+            background: var(--bg-color);
+        }
+
+        .demo-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .code-block {
+            background: var(--primary-color);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+        }
+
+        .qr-example {
+            text-align: center;
+            padding: 40px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .downloads {
+            padding: 80px 0;
+            background: white;
+            text-align: center;
+        }
+
+        .download-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .download-card {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 12px;
+            border: 3px solid var(--bg-color);
+            transition: all 0.3s ease;
+        }
+
+        .download-card:hover {
+            border-color: var(--secondary-color);
+            transform: translateY(-3px);
+        }
+
+        footer {
+            background: var(--primary-color);
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+        }
+
+        .badges {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            display: inline-block;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .demo-container { grid-template-columns: 1fr; }
+            .cta-buttons { flex-direction: column; align-items: center; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="hero">
+                <h1>🔥 QR Forge</h1>
+                <p class="tagline">Professional QR code generator built with Rust<br>
+                High-quality output, multiple formats, and dual interfaces</p>
+                
+                <div class="badges">
+                    <img src="https://img.shields.io/github/release/fra2404/qr-forge.svg" alt="Release" class="badge">
+                    <img src="https://img.shields.io/github/downloads/fra2404/qr-forge/total.svg" alt="Downloads" class="badge">
+                    <img src="https://img.shields.io/badge/rust-1.70+-orange.svg" alt="Rust" class="badge">
+                    <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License" class="badge">
+                </div>
+
+                <div class="cta-buttons">
+                    <a href="https://github.com/fra2404/qr-forge/releases/latest" class="btn">📦 Download Now</a>
+                    <a href="https://github.com/fra2404/qr-forge" class="btn btn-secondary">📚 View on GitHub</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="features">
+        <div class="container">
+            <h2 class="section-title">✨ Features</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <span class="feature-icon">🎨</span>
+                    <h3>Multiple Formats</h3>
+                    <p>SVG (scalable), PNG, JPG, BMP - choose the perfect format for your needs</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">🔧</span>
+                    <h3>Highly Customizable</h3>
+                    <p>Colors, sizes, margins, error correction - full control over your QR codes</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">⚡</span>
+                    <h3>Fast & Efficient</h3>
+                    <p>Written in Rust for maximum performance and reliability</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">🖥️</span>
+                    <h3>Dual Interface</h3>
+                    <p>Both CLI for automation and GUI for ease of use</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">🍎</span>
+                    <h3>Native macOS App</h3>
+                    <p>Complete .app bundle with icon and system integration</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">📱</span>
+                    <h3>Print Optimized</h3>
+                    <p>Professional quality with error correction up to level H</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="demo">
+        <div class="container">
+            <h2 class="section-title">🚀 Quick Demo</h2>
+            <div class="demo-container">
+                <div>
+                    <h3>Command Line Interface</h3>
+                    <div class="code-block">
+# Generate a basic QR code
+qr-forge --url "https://github.com/fra2404/qr-forge"
+
+# Custom colors and format
+qr-forge --url "https://rust-lang.org" \
+  --format svg \
+  --color "ff6600" \
+  --background-color "f5f5dc"
+
+# High-resolution for printing
+qr-forge --url "https://example.com" \
+  --format png \
+  --size 2400 \
+  --margin 4
+                    </div>
+                </div>
+                <div class="qr-example">
+                    <h3>GUI Interface</h3>
+                    <p>🎯 Real-time preview<br>
+                    🎨 Visual color picker<br>
+                    📁 Easy file saving<br>
+                    ⚙️ Interactive controls</p>
+                    <div style="margin: 20px 0; font-size: 4rem;">📱</div>
+                    <p><em>Beautiful, intuitive interface for all users</em></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="downloads">
+        <div class="container">
+            <h2 class="section-title">📦 Downloads</h2>
+            <p>Choose your platform and start generating professional QR codes today!</p>
+            
+            <div class="download-grid">
+                <div class="download-card">
+                    <h3>🍎 macOS</h3>
+                    <p>Complete GUI app with native integration</p>
+                    <a href="https://github.com/fra2404/qr-forge/releases/latest" class="btn" style="margin-top: 15px;">Download DMG</a>
+                </div>
+                <div class="download-card">
+                    <h3>💻 CLI Tools</h3>
+                    <p>Command-line tools for automation</p>
+                    <a href="https://github.com/fra2404/qr-forge/releases/latest" class="btn" style="margin-top: 15px;">Download Archive</a>
+                </div>
+                <div class="download-card">
+                    <h3>🔧 Build from Source</h3>
+                    <p>Clone and compile with Cargo</p>
+                    <a href="https://github.com/fra2404/qr-forge" class="btn" style="margin-top: 15px;">View Source</a>
+                </div>
+            </div>
+
+            <div style="margin-top: 40px; padding: 20px; background: #fff3cd; border-radius: 8px; border-left: 4px solid #ffc107;">
+                <h4>⚠️ macOS Security Note</h4>
+                <p>If macOS says the app is "damaged", right-click and select "Open" or run:<br>
+                <code>sudo xattr -c "/Applications/QR Forge.app"</code></p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 QR Forge - Made with ❤️ in Rust</p>
+            <p>Licensed under MIT License</p>
+        </div>
+    </footer>
+</body>
+</html>
