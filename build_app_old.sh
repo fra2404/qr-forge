@@ -12,12 +12,10 @@ CLI_DIR="$BUILD_DIR/cli"
 APP_DIR="$BUILD_DIR/apps"
 DIST_DIR="$BUILD_DIR/distributions"
 
-# Clean previous builds (preserve image.png)
+# Clean previous builds
 echo "🧹 Cleaning previous builds..."
 cargo clean
-rm -rf "$BUILD_DIR" dist/ dist-app/ *.tar.gz *.dmg
-# Remove generated PNG files but keep image.png (our app icon source)
-find . -name "*.png" -not -name "image.png" -not -path "./target/*" -delete
+rm -rf "$BUILD_DIR" dist/ dist-app/ *.tar.gz *.dmg *.png
 
 # Create build structure
 echo "📁 Creating build directories..."
@@ -126,7 +124,7 @@ if [ -f "image.png" ]; then
     echo "   ✅ Using custom icon from image.png"
     # Use our custom icon creation script
     ./create_icon.sh
-    # Move the icon to the app bundle if it was created in the wrong place
+    # Copy the icon to the app bundle
     if [ -f "QR Forge.app/Contents/Resources/icon.icns" ]; then
         cp "QR Forge.app/Contents/Resources/icon.icns" "$APP_PATH/Contents/Resources/"
         rm -rf "QR Forge.app"
@@ -156,41 +154,29 @@ else
     fi
 fi
 
-# Create distribution packages
-echo "📦 Creating distribution packages..."
-
-# Copy app and documentation to distributions folder
-cp -R "$APP_PATH" "$DIST_DIR/"
-cp README.md LICENSE "$DIST_DIR/"
+# Create App distribution
+mkdir -p dist-app/
+cp -R "QR Forge.app" dist-app/
+cp README.md LICENSE dist-app/
 
 # Create archives
 echo "📦 Creating distribution archives..."
-cd "$CLI_DIR"
-tar -czf "../../$DIST_DIR/QR-Forge-CLI-v1.0.0-macos.tar.gz" .
-cd - >/dev/null
-
-cd "$APP_DIR"
-tar -czf "../distributions/QR-Forge-App-v1.0.0-macos.tar.gz" .
-cd - >/dev/null
+tar -czf "QR-Forge-CLI-v1.0.0-macos.tar.gz" -C dist .
+tar -czf "QR-Forge-App-v1.0.0-macos.tar.gz" -C dist-app .
 
 # Summary
 echo ""
 echo "✅ Build completed successfully!"
 echo ""
-echo "📂 Organized build structure:"
-echo "   📁 $CLI_DIR/ - CLI tools and executables"
-echo "   🍎 $APP_PATH - macOS Application Bundle"
-echo "   📦 $DIST_DIR/ - Distribution files and archives"
-echo ""
-echo "📦 Distribution archives created:"
-echo "   🔧 QR-Forge-CLI-v1.0.0-macos.tar.gz - CLI distribution"
-echo "   📱 QR-Forge-App-v1.0.0-macos.tar.gz - App distribution"
+echo "� Distribution files created:"
+echo "   📁 dist/ - CLI tools and executables"
+echo "   🍎 QR Forge.app - macOS Application"
+echo "   � QR-Forge-CLI-v1.0.0-macos.tar.gz - CLI distribution"
+echo "   📦 QR-Forge-App-v1.0.0-macos.tar.gz - App distribution"
 echo ""
 echo "🚀 To test the app:"
-echo "   open '$APP_PATH'"
+echo "   open 'QR Forge.app'"
 echo ""
 echo "🔧 To test CLI:"
-echo "   ./$CLI_DIR/qr-forge-gui"
-echo "   ./$CLI_DIR/qr-forge --url 'https://example.com'"
-echo ""
-echo "🎯 All builds are organized in the '$BUILD_DIR' directory!"
+echo "   ./dist/qr-forge-gui"
+echo "   ./dist/qr-forge --url 'https://example.com'"

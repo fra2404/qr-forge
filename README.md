@@ -1,10 +1,13 @@
 # 🔥 QR Forge
 
+> **Professional QR code generator built with Rust** - High-quality output, multiple formats, and dual interfaces
+
 [![CI](https://github.com/fra2404/qr-forge/actions/workflows/ci.yml/badge.svg)](https://github.com/fra2404/qr-forge/actions/workflows/ci.yml)
 [![Release](https://github.com/fra2404/qr-forge/actions/workflows/release.yml/badge.svg)](https://github.com/fra2404/qr-forge/actions/workflows/release.yml)
 [![Rust](https://img.shields.io/badge/rust-1.70+-orange.svg)](https://www.rust-lang.org)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![GitHub release](https://img.shields.io/github/release/fra2404/qr-forge.svg)](https://github.com/fra2404/qr-forge/releases/latest)
+[![Downloads](https://img.shields.io/github/downloads/fra2404/qr-forge/total.svg)](https://github.com/fra2404/qr-forge/releases)
 
 **QR Forge** is a powerful QR code generator written in Rust that produces **highest quality** QR codes with support for scalable SVG formats and high-resolution bitmaps.
 
@@ -28,6 +31,16 @@ Get the latest release from [GitHub Releases](https://github.com/fra2404/qr-forg
 - **macOS**: Download `QR-Forge-GUI-macos.dmg` for the GUI app, or `qr-forge-cli-macos.tar.gz` for CLI
 - **Linux**: Download `qr-forge-gui-linux.tar.gz` or `qr-forge-cli-linux.tar.gz`
 - **Windows**: Download `qr-forge-gui-windows.zip` or `qr-forge-cli-windows.zip`
+
+#### 🍎 macOS Installation Note
+
+If macOS says the app is "damaged" or "cannot be opened":
+
+1. **Right-click** on QR Forge.app and select **"Open"**
+2. Click **"Open"** in the security dialog
+3. Alternatively, run in Terminal: `sudo xattr -c "/Applications/QR Forge.app"`
+
+This happens because the app isn't signed with an Apple Developer certificate ($99/year).
 
 ### Build from Source
 

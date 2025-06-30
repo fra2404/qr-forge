@@ -3,147 +3,154 @@ name: Release
 on:
   push:
     tags:
-      - 'v*'
+      - "v*"
+
+permissions:
+  contents: write
+  actions: read
+  deployments: write
 
 env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  create-release:
-    name: Create Release
-    runs-on: ubuntu-latest
-    outputs:
-      upload_url: ${{ steps.create_release.outputs.upload_url }}
-    steps:
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: ${{ github.ref }}
-        release_name: QR Forge ${{ github.ref }}
-        body: |
-          ## Features
-          - CLI QR code generator with multiple output formats
-          - GUI application with real-time preview
-          - Support for PNG, SVG, JPEG formats
-          - Customizable colors and sizes
-          - macOS app bundle included
-          
-          ## Downloads
-          - **qr-forge-cli-linux.tar.gz**: Linux CLI binary
-          - **qr-forge-cli-windows.zip**: Windows CLI binary  
-          - **qr-forge-cli-macos.tar.gz**: macOS CLI binary
-          - **QR-Forge-GUI-macos.dmg**: macOS GUI application
-          - **qr-forge-gui-linux.tar.gz**: Linux GUI binary
-          - **qr-forge-gui-windows.zip**: Windows GUI binary
-        draft: false
-        prerelease: false
-
   build-release:
-    name: Build Release
-    needs: create-release
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        include:
-          - os: ubuntu-latest
-            target: x86_64-unknown-linux-gnu
-            name: linux
-          - os: windows-latest
-            target: x86_64-pc-windows-msvc
-            name: windows
-          - os: macos-latest
-            target: x86_64-apple-darwin
-            name: macos
+    name: Build Release (macOS only)
+    runs-on: macos-latest
     steps:
-    - uses: actions/checkout@v4
-    
-    - name: Install Rust
-      uses: dtolnay/rust-toolchain@stable
-      with:
-        targets: ${{ matrix.target }}
-    
-    - name: Install dependencies (Linux)
-      if: matrix.os == 'ubuntu-latest'
-      run: sudo apt-get update && sudo apt-get install -y libgtk-3-dev
-    
-    - name: Build CLI
-      run: cargo build --release --bin qr-forge --target ${{ matrix.target }}
-    
-    - name: Build GUI
-      run: cargo build --release --bin qr-forge-gui --target ${{ matrix.target }}
-    
-    - name: Create CLI archive (Unix)
-      if: matrix.os != 'windows-latest'
-      run: |
-        mkdir -p dist-cli
-        cp target/${{ matrix.target }}/release/qr-forge dist-cli/
-        cp README.md LICENSE dist-cli/
-        tar -czf qr-forge-cli-${{ matrix.name }}.tar.gz -C dist-cli .
-    
-    - name: Create CLI archive (Windows)
-      if: matrix.os == 'windows-latest'
-      run: |
-        mkdir dist-cli
-        copy target\${{ matrix.target }}\release\qr-forge.exe dist-cli\
-        copy README.md dist-cli\
-        copy LICENSE dist-cli\
-        powershell Compress-Archive -Path dist-cli\* -DestinationPath qr-forge-cli-${{ matrix.name }}.zip
-    
-    - name: Create GUI archive (Unix)
-      if: matrix.os != 'windows-latest'
-      run: |
-        mkdir -p dist-gui
-        cp target/${{ matrix.target }}/release/qr-forge-gui dist-gui/
-        cp README.md LICENSE dist-gui/
-        tar -czf qr-forge-gui-${{ matrix.name }}.tar.gz -C dist-gui .
-    
-    - name: Create GUI archive (Windows)
-      if: matrix.os == 'windows-latest'
-      run: |
-        mkdir dist-gui
-        copy target\${{ matrix.target }}\release\qr-forge-gui.exe dist-gui\
-        copy README.md dist-gui\
-        copy LICENSE dist-gui\
-        powershell Compress-Archive -Path dist-gui\* -DestinationPath qr-forge-gui-${{ matrix.name }}.zip
-    
-    - name: Create macOS App Bundle
-      if: matrix.os == 'macos-latest'
-      run: |
-        chmod +x create_icon.sh build_app.sh
-        ./create_icon.sh
-        ./build_app.sh
-        hdiutil create -volname "QR Forge" -srcfolder "QR Forge.app" -ov -format UDZO QR-Forge-GUI-macos.dmg
-    
-    - name: Upload CLI Release Asset
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ needs.create-release.outputs.upload_url }}
-        asset_path: ./qr-forge-cli-${{ matrix.name }}.${{ matrix.os == 'windows-latest' && 'zip' || 'tar.gz' }}
-        asset_name: qr-forge-cli-${{ matrix.name }}.${{ matrix.os == 'windows-latest' && 'zip' || 'tar.gz' }}
-        asset_content_type: ${{ matrix.os == 'windows-latest' && 'application/zip' || 'application/gzip' }}
-    
-    - name: Upload GUI Release Asset
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ needs.create-release.outputs.upload_url }}
-        asset_path: ./qr-forge-gui-${{ matrix.name }}.${{ matrix.os == 'windows-latest' && 'zip' || 'tar.gz' }}
-        asset_name: qr-forge-gui-${{ matrix.name }}.${{ matrix.os == 'windows-latest' && 'zip' || 'tar.gz' }}
-        asset_content_type: ${{ matrix.os == 'windows-latest' && 'application/zip' || 'application/gzip' }}
-    
-    - name: Upload macOS DMG
-      if: matrix.os == 'macos-latest'
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ needs.create-release.outputs.upload_url }}
-        asset_path: ./QR-Forge-GUI-macos.dmg
-        asset_name: QR-Forge-GUI-macos.dmg
-        asset_content_type: application/x-apple-diskimage
+      - uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Verify icon exists
+        run: |
+          if [ -f "image.png" ]; then
+            echo "✅ Found existing image.png icon"
+            ls -la image.png
+          else
+            echo "❌ image.png not found!"
+            exit 1
+          fi
+
+      - name: Build QR Forge (CLI + GUI + App)
+        run: |
+          chmod +x build_app.sh create_icon.sh
+          ./build_app.sh
+
+      - name: Debug build structure
+        run: |
+          echo "=== Build directory structure ==="
+          find build -type f -name "*" | head -20
+          echo ""
+          echo "=== Apps directory ==="
+          ls -la build/apps/ || echo "apps directory not found"
+          echo ""
+          echo "=== CLI directory ==="
+          ls -la build/cli/ || echo "cli directory not found"
+
+      - name: Remove quarantine attributes (for distribution)
+        run: |
+          if [ -d "build/apps/QR Forge.app" ]; then
+            echo "Removing quarantine attributes from app bundle"
+            sudo xattr -rd com.apple.quarantine "build/apps/QR Forge.app" || true
+            # Clear extended attributes that cause "damaged" warnings
+            sudo xattr -c "build/apps/QR Forge.app" || true
+            find "build/apps/QR Forge.app" -type f -exec sudo xattr -c {} \; || true
+          fi
+
+      - name: Create macOS DMG
+        run: |
+          if [ -d "build/apps/QR Forge.app" ]; then
+            echo "Creating DMG from build/apps/QR Forge.app"
+            hdiutil create -volname "QR Forge" -srcfolder "build/apps/QR Forge.app" -ov -format UDZO QR-Forge-GUI-macos.dmg
+            # Also clear quarantine from DMG
+            sudo xattr -c QR-Forge-GUI-macos.dmg || true
+          else
+            echo "App bundle not found at build/apps/QR Forge.app"
+            echo "Looking for alternative locations..."
+            find . -name "QR Forge.app" -type d
+            exit 1
+          fi
+
+      - name: Create CLI archive
+        run: |
+          if [ -d "build/cli" ] && [ -f "build/cli/qr-forge" ]; then
+            echo "Creating CLI archive from build/cli"
+            cd build/cli
+            tar -czf ../../qr-forge-cli-macos.tar.gz qr-forge qr-forge-gui ../../README.md ../../LICENSE
+          else
+            echo "CLI binaries not found in build/cli"
+            echo "Looking for CLI binaries..."
+            find . -name "qr-forge" -type f
+            exit 1
+          fi
+
+      - name: Verify build artifacts
+        run: |
+          echo "=== Checking build artifacts ==="
+          if [ -f "QR-Forge-GUI-macos.dmg" ]; then
+            echo "✅ DMG created successfully:"
+            ls -la QR-Forge-GUI-macos.dmg
+          else
+            echo "❌ DMG not found"
+          fi
+          
+          if [ -f "qr-forge-cli-macos.tar.gz" ]; then
+            echo "✅ CLI archive created successfully:"
+            ls -la qr-forge-cli-macos.tar.gz
+          else
+            echo "❌ CLI archive not found"
+          fi
+          
+          echo ""
+          echo "=== Root directory contents ==="
+          ls -la
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        if: success()
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          name: QR Forge ${{ github.ref_name }}
+          tag_name: ${{ github.ref_name }}
+          draft: false
+          prerelease: false
+          body: |
+            ## 🔥 QR Forge ${{ github.ref_name }} - macOS Release
+
+            Professional QR code generator with multiple formats and interfaces.
+
+            ### ✨ Features
+            - CLI QR code generator with multiple output formats
+            - GUI application with real-time preview  
+            - Support for PNG, SVG, JPEG formats
+            - Customizable colors and sizes
+            - Native macOS app bundle with custom icon
+
+            ### 📦 Downloads
+
+            **🍎 macOS Users:**
+            - **QR-Forge-GUI-macos.dmg** - Complete GUI app (drag to Applications)
+            - **qr-forge-cli-macos.tar.gz** - CLI tools (terminal use)
+
+            ### 🚀 Quick Start
+            - **GUI**: Mount the DMG and drag QR Forge to Applications
+            - **CLI**: Extract and run `./qr-forge "Your text here" -o output.svg`
+
+            ### ⚠️ macOS Security Notice
+            If macOS says the app is "damaged" or "can't be opened":
+            1. **Right-click** on the app and select **"Open"**
+            2. Click **"Open"** in the security dialog
+            3. Or run in Terminal: `sudo xattr -c "/Applications/QR Forge.app"`
+
+            This happens because the app isn't signed with an Apple Developer certificate.
+
+            See [README.md](https://github.com/fra2404/qr-forge#readme) for detailed usage instructions.
+
+            ---
+            *Cross-platform builds (Linux/Windows) coming soon!*
+          files: |
+            QR-Forge-GUI-macos.dmg
+            qr-forge-cli-macos.tar.gz
