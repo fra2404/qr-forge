@@ -24,6 +24,16 @@
 
 ## 🚀 Quick Start
 
+### 🍺 Install with Homebrew (macOS - Recommended)
+
+```bash
+# Install QR Forge CLI and GUI
+brew install fra2404/qr-forge/qr-forge
+
+# Or install from main Homebrew (coming soon)
+brew install qr-forge
+```
+
 ### Download Pre-built Binaries
 
 Get the latest release from [GitHub Releases](https://github.com/fra2404/qr-forge/releases/latest):
