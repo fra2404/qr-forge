@@ -32,6 +32,16 @@ Get the latest release from [GitHub Releases](https://github.com/fra2404/qr-forg
 - **Linux**: Download `qr-forge-gui-linux.tar.gz` or `qr-forge-cli-linux.tar.gz`
 - **Windows**: Download `qr-forge-gui-windows.zip` or `qr-forge-cli-windows.zip`
 
+#### 🍎 macOS Installation Note
+
+If macOS says the app is "damaged" or "cannot be opened":
+
+1. **Right-click** on QR Forge.app and select **"Open"**
+2. Click **"Open"** in the security dialog
+3. Alternatively, run in Terminal: `sudo xattr -c "/Applications/QR Forge.app"`
+
+This happens because the app isn't signed with an Apple Developer certificate ($99/year).
+
 ### Build from Source
 
 ```bash

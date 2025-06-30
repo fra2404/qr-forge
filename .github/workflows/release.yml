@@ -49,11 +49,23 @@ jobs:
           echo "=== CLI directory ==="
           ls -la build/cli/ || echo "cli directory not found"
 
+      - name: Remove quarantine attributes (for distribution)
+        run: |
+          if [ -d "build/apps/QR Forge.app" ]; then
+            echo "Removing quarantine attributes from app bundle"
+            sudo xattr -rd com.apple.quarantine "build/apps/QR Forge.app" || true
+            # Clear extended attributes that cause "damaged" warnings
+            sudo xattr -c "build/apps/QR Forge.app" || true
+            find "build/apps/QR Forge.app" -type f -exec sudo xattr -c {} \; || true
+          fi
+
       - name: Create macOS DMG
         run: |
           if [ -d "build/apps/QR Forge.app" ]; then
             echo "Creating DMG from build/apps/QR Forge.app"
             hdiutil create -volname "QR Forge" -srcfolder "build/apps/QR Forge.app" -ov -format UDZO QR-Forge-GUI-macos.dmg
+            # Also clear quarantine from DMG
+            sudo xattr -c QR-Forge-GUI-macos.dmg || true
           else
             echo "App bundle not found at build/apps/QR Forge.app"
             echo "Looking for alternative locations..."
@@ -126,6 +138,14 @@ jobs:
             ### 🚀 Quick Start
             - **GUI**: Mount the DMG and drag QR Forge to Applications
             - **CLI**: Extract and run `./qr-forge "Your text here" -o output.svg`
+
+            ### ⚠️ macOS Security Notice
+            If macOS says the app is "damaged" or "can't be opened":
+            1. **Right-click** on the app and select **"Open"**
+            2. Click **"Open"** in the security dialog
+            3. Or run in Terminal: `sudo xattr -c "/Applications/QR Forge.app"`
+
+            This happens because the app isn't signed with an Apple Developer certificate.
 
             See [README.md](https://github.com/fra2404/qr-forge#readme) for detailed usage instructions.
 
