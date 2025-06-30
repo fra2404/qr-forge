@@ -2,15 +2,46 @@
 name = "qr-forge"
 version = "1.0.0"
 edition = "2021"
-description = "Generatore di QR code di alta qualità con supporto SVG e PNG - High-quality QR code generator with SVG and PNG support"
-authors = ["Francesco ALbano"]
+description = "High-quality QR code generator with SVG and PNG support, featuring both CLI and GUI interfaces"
+authors = ["Francesco Albano <fransyalbano@gmail.com>"]
 license = "MIT"
 repository = "https://github.com/fra2404/qr-forge"
-keywords = ["qr-code", "svg", "generator", "cli", "rust"]
-categories = ["command-line-utilities", "multimedia::images"]
+homepage = "https://github.com/fra2404/qr-forge"
+documentation = "https://github.com/fra2404/qr-forge#readme"
+readme = "README.md"
+keywords = ["qr-code", "svg", "generator", "cli", "gui"]
+categories = ["command-line-utilities", "multimedia::images", "gui"]
+exclude = [
+    "target/*",
+    ".github/*",
+    "dist/*",
+    "dist-app/*",
+    "*.tar.gz",
+    "*.dmg",
+    ".DS_Store"
+]
+
+[package.metadata.bundle]
+name = "QR Forge"
+identifier = "com.francesco.qr-forge"
+category = "Developer Tool"
+short_description = "High-quality QR code generator"
+long_description = "A powerful QR code generator with support for multiple formats including SVG, PNG, JPEG, and BMP. Features both command-line and graphical interfaces."
+
+[[bin]]
+name = "qr-forge"
+path = "src/main.rs"
+
+[[bin]]
+name = "qr-forge-gui"
+path = "src/gui_main.rs"
 
 [dependencies]
 qrcode = "0.14"
 image = "0.24"
 clap = { version = "4.4", features = ["derive"] }
 svg = "0.14"
+eframe = "0.24"
+egui = "0.24"
+rfd = "0.12"
+open = "5.0"

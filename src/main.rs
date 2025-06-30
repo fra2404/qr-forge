@@ -5,6 +5,8 @@ use std::fs;
 use svg::Document;
 use svg::node::element::{Rectangle, Group};
 
+mod gui_core;
+
 #[derive(Parser)]
 #[command(name = "qr-forge")]
 #[command(about = "🔥 QR Forge - High-quality QR code generator with SVG support")]
@@ -14,7 +16,7 @@ use svg::node::element::{Rectangle, Group};
 struct Args {
     /// Website URL to generate QR code for
     #[arg(short, long)]
-    url: String,
+    url: Option<String>,
 
     /// Output file name (without extension)
     #[arg(short, long, default_value = "qrcode")]
@@ -43,13 +45,32 @@ struct Args {
     /// Background color (for SVG, hex format without #)
     #[arg(long, default_value = "ffffff")]
     background_color: String,
+
+    /// Launch GUI mode instead of CLI
+    #[arg(long, action)]
+    gui: bool,
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let args = Args::parse();
 
+    // Check if GUI mode is requested
+    if args.gui {
+        println!("🚀 Launching QR Forge GUI...");
+        return gui_core::run_gui().map_err(|e| e.into());
+    }
+
+    // CLI mode - URL is required
+    let url_str = match &args.url {
+        Some(url) => url,
+        None => {
+            eprintln!("❌ Error: URL is required in CLI mode. Use --url <URL> or --gui for GUI mode.");
+            std::process::exit(1);
+        }
+    };
+
     // URL validation
-    let url = validate_url(&args.url)?;
+    let url = validate_url(url_str)?;
     
     // Determine error correction level
     let ec_level = match args.error_correction.to_uppercase().as_str() {
@@ -110,7 +131,7 @@ fn validate_url(input: &str) -> Result<String, Box<dyn std::error::Error>> {
     Ok(url)
 }
 
-fn generate_high_quality_image(
+pub fn generate_high_quality_image(
     qr_code: &QrCode,
     size: u32,
     margin: u32,
@@ -243,7 +264,7 @@ fn get_max_capacity(version: qrcode::Version, ec_level: EcLevel) -> usize {
     }
 }
 
-fn generate_svg_qr(
+pub fn generate_svg_qr(
     qr_code: &QrCode,
     filename: &str,
     size: u32,

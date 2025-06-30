@@ -1,7 +1,6 @@
 # Rust
 /target/
 **/*.rs.bk
-Cargo.lock
 
 # IDE
 .vscode/
@@ -22,9 +21,19 @@ Thumbs.db
 !examples/*.png
 !examples/*.svg
 
+# Distribution
+/dist/
+/dist-app/
+*.tar.gz
+*.dmg
+
+# App bundle (exclude from git)
+/*.app/
+
+# Temporary files
+*.tmp
+*.temp
+*~
+
 # Logs
 *.log
-
-# Backup files
-*~
-*.tmp

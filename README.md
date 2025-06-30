@@ -1,7 +1,10 @@
 # 🔥 QR Forge
 
+[![CI](https://github.com/fra2404/qr-forge/actions/workflows/ci.yml/badge.svg)](https://github.com/fra2404/qr-forge/actions/workflows/ci.yml)
+[![Release](https://github.com/fra2404/qr-forge/actions/workflows/release.yml/badge.svg)](https://github.com/fra2404/qr-forge/actions/workflows/release.yml)
 [![Rust](https://img.shields.io/badge/rust-1.70+-orange.svg)](https://www.rust-lang.org)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![GitHub release](https://img.shields.io/github/release/fra2404/qr-forge.svg)](https://github.com/fra2404/qr-forge/releases/latest)
 
 **QR Forge** is a powerful QR code generator written in Rust that produces **highest quality** QR codes with support for scalable SVG formats and high-resolution bitmaps.
 
@@ -13,25 +16,52 @@
 - ⚡ **Fast and efficient**: written in Rust for maximum performance
 - 🎯 **Professional quality**: error correction up to level H
 - 📐 **Scalable SVG**: infinite quality without loss of detail
+- 🖥️ **Dual interface**: Both CLI and GUI modes available
+- 🍎 **Native macOS app**: Complete .app bundle with icon and integration
 
-## 🚀 Installation
+## 🚀 Quick Start
 
-### Prerequisites
+### Download Pre-built Binaries
 
-- Rust 1.70 or higher
-- Cargo (included with Rust)
+Get the latest release from [GitHub Releases](https://github.com/fra2404/qr-forge/releases/latest):
 
-### Build from source
+- **macOS**: Download `QR-Forge-GUI-macos.dmg` for the GUI app, or `qr-forge-cli-macos.tar.gz` for CLI
+- **Linux**: Download `qr-forge-gui-linux.tar.gz` or `qr-forge-cli-linux.tar.gz`
+- **Windows**: Download `qr-forge-gui-windows.zip` or `qr-forge-cli-windows.zip`
+
+### Build from Source
 
 ```bash
-git clone https://github.com/francesco/qr-forge.git
+git clone https://github.com/fra2404/qr-forge.git
 cd qr-forge
 cargo build --release
 ```
 
-The executable will be available at `target/release/qr-forge`
-
 ## 📖 Usage
+
+### GUI Mode (Recommended)
+
+**macOS**: Double-click the QR Forge app or run:
+
+```bash
+qr-forge-gui
+```
+
+**Other platforms**: Run the GUI executable:
+
+```bash
+./qr-forge-gui
+```
+
+The GUI provides an intuitive interface with:
+
+- 🎯 Real-time QR code preview
+- 🎨 Visual color picker for SVG formats
+- 📁 Easy file saving with system dialogs
+- ⚙️ Interactive parameter adjustment
+- 📊 Instant feedback and status messages
+
+### CLI Mode (Advanced users)
 
 ### Basic syntax
 
